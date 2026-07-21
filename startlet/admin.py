@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
 from .models import (
     Branch, UserProfile, Customer, SubscriptionPlan, CustomerSubscription, Session, Transaction,
-    TimeSlot, DayOff, SlotConfig, Invoice, Announcement, TrainerEarning,
+    TimeSlot, DayOff, SlotConfig, Invoice, Announcement, TrainerEarning, SlotGenerationLog,
 )
 
 class UserProfileInline(admin.StackedInline):
@@ -109,3 +109,16 @@ class TrainerEarningAdmin(admin.ModelAdmin):
     list_display = ('trainer', 'session', 'session_amount', 'trainer_earning', 'gym_earning', 'is_paid', 'paid_at')
     list_filter = ('is_paid',)
     search_fields = ('trainer__email', 'trainer__name')
+
+
+@admin.register(SlotGenerationLog)
+class SlotGenerationLogAdmin(admin.ModelAdmin):
+    list_display = ('ran_at', 'success', 'branches_processed', 'slots_created')
+    list_filter = ('success',)
+    readonly_fields = ('ran_at', 'success', 'branches_processed', 'slots_created', 'details')
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False

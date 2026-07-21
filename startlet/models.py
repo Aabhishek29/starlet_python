@@ -385,3 +385,18 @@ class TrainerEarning(models.Model):
 
     def __str__(self):
         return f"{self.trainer.name} - ₹{self.trainer_earning}"
+
+
+class SlotGenerationLog(models.Model):
+    """Record of each generate_daily_slots run, for admin visibility into the cron job"""
+    ran_at = models.DateTimeField(auto_now_add=True)
+    success = models.BooleanField(default=True)
+    branches_processed = models.IntegerField(default=0)
+    slots_created = models.IntegerField(default=0)
+    details = models.TextField(blank=True)
+
+    class Meta:
+        ordering = ['-ran_at']
+
+    def __str__(self):
+        return f"{self.ran_at.strftime('%Y-%m-%d %H:%M')} - {'OK' if self.success else 'FAILED'}"
