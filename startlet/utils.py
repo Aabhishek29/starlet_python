@@ -1,8 +1,49 @@
 from django.conf import settings
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from twilio.rest import Client
 from datetime import datetime, timedelta, time
 import requests
 from .models import TimeSlot, SlotConfig, DayOff
+
+
+def send_email(subject, message, recipient_list, html_message=None, from_email=None, fail_silently=False):
+    """Send an email using Django's send_mail."""
+    if isinstance(recipient_list, str):
+        recipient_list = [recipient_list]
+
+    return send_mail(
+        subject=subject,
+        message=message,
+        from_email=from_email or settings.DEFAULT_FROM_EMAIL,
+        recipient_list=recipient_list,
+        html_message=html_message,
+        fail_silently=fail_silently,
+    )
+
+
+def send_branded_email(subject, content, recipient_list, heading=None, from_email=None, fail_silently=False):
+    """
+    Send an email using the Starlet Fitness branded template.
+    Pass just the subject, content (plain text or simple HTML), and recipient(s) —
+    the logo, colors, and layout are applied automatically.
+    """
+    html_message = render_to_string('email/base_email.html', {
+        'subject': subject,
+        'heading': heading,
+        'content': content,
+        'logo_url': f"{settings.SITE_URL}/static/email/logo.png",
+    })
+
+    return send_email(
+        subject=subject,
+        message=strip_tags(content),
+        recipient_list=recipient_list,
+        html_message=html_message,
+        from_email=from_email,
+        fail_silently=fail_silently,
+    )
 
 
 def send_otp(phone, otp):

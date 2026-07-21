@@ -82,6 +82,18 @@ TWILIO_PHONE_NUMBER = config("TWILIO_PHONE_NUMBER")
 ACTIVEX_API_KEY = config("ACTIVEX_API_KEY", default="")
 ACTIVEX_API_URL = config("ACTIVEX_API_URL", default="https://api.activex.ai/external/bca")
 
+# Email
+EMAIL_BACKEND = config("EMAIL_BACKEND", default="django.core.mail.backends.console.EmailBackend")
+EMAIL_HOST = config("EMAIL_HOST", default="")
+EMAIL_PORT = config("EMAIL_PORT", default=587, cast=int)
+EMAIL_USE_TLS = config("EMAIL_USE_TLS", default=True, cast=bool)
+EMAIL_HOST_USER = config("EMAIL_HOST_USER", default="")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD", default="")
+DEFAULT_FROM_EMAIL = config("DEFAULT_FROM_EMAIL", default=EMAIL_HOST_USER)
+
+# Public base URL, used to build absolute asset links (e.g. logo) in emails
+SITE_URL = config("SITE_URL", default="http://localhost:8000")
+
 
 ROOT_URLCONF = 'startlet_fitness.urls'
 
