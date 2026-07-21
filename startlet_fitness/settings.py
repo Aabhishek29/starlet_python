@@ -35,6 +35,7 @@ ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="*", cast=lambda v: [h.strip() f
 INSTALLED_APPS = [
     'startlet',
     'rest_framework',
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -152,3 +153,40 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Starlet Fitness Admin",
+    "site_header": "Starlet Fitness",
+    "site_brand": "Starlet Fitness",
+    "welcome_sign": "Welcome to Starlet Fitness Admin",
+    "copyright": "Starlet Fitness",
+    "search_model": ["auth.User", "startlet.Customer"],
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "icons": {
+        "auth.user": "fas fa-user",
+        "auth.group": "fas fa-users",
+        "startlet.Branch": "fas fa-building",
+        "startlet.UserProfile": "fas fa-id-badge",
+        "startlet.Customer": "fas fa-user-friends",
+        "startlet.SubscriptionPlan": "fas fa-clipboard-list",
+        "startlet.CustomerSubscription": "fas fa-file-signature",
+        "startlet.Session": "fas fa-dumbbell",
+        "startlet.Transaction": "fas fa-money-bill-wave",
+        "startlet.TimeSlot": "fas fa-clock",
+        "startlet.DayOff": "fas fa-calendar-times",
+        "startlet.SlotConfig": "fas fa-calendar-alt",
+        "startlet.Invoice": "fas fa-file-invoice",
+        "startlet.Announcement": "fas fa-bullhorn",
+        "startlet.TrainerEarning": "fas fa-hand-holding-usd",
+    },
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "flatly",
+    "navbar": "navbar-white navbar-light",
+    "sidebar": "sidebar-light-primary",
+    "sidebar_nav_flat_style": True,
+}

@@ -1,7 +1,10 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
-from .models import Branch, UserProfile, Customer, SubscriptionPlan, CustomerSubscription, Session, Transaction
+from .models import (
+    Branch, UserProfile, Customer, SubscriptionPlan, CustomerSubscription, Session, Transaction,
+    TimeSlot, DayOff, SlotConfig, Invoice, Announcement, TrainerEarning,
+)
 
 class UserProfileInline(admin.StackedInline):
     model = UserProfile
@@ -65,3 +68,44 @@ class TransactionAdmin(admin.ModelAdmin):
     list_display = ('customer', 'amount', 'transaction_type', 'transaction_date', 'branch', 'subscription_plan')
     list_filter = ('transaction_type', 'branch')
     search_fields = ('customer__email', 'transaction_reference', 'invoice_number')
+
+
+@admin.register(TimeSlot)
+class TimeSlotAdmin(admin.ModelAdmin):
+    list_display = ('branch', 'date', 'start_time', 'end_time', 'status', 'booked_by')
+    list_filter = ('status', 'branch', 'date')
+    search_fields = ('branch__name', 'booked_by__email')
+
+
+@admin.register(DayOff)
+class DayOffAdmin(admin.ModelAdmin):
+    list_display = ('branch', 'date', 'reason', 'created_by')
+    list_filter = ('branch',)
+    search_fields = ('branch__name', 'reason')
+
+
+@admin.register(SlotConfig)
+class SlotConfigAdmin(admin.ModelAdmin):
+    list_display = ('branch', 'weekday', 'morning_start', 'morning_end', 'evening_start', 'evening_end', 'is_active')
+    list_filter = ('branch', 'weekday', 'is_active')
+
+
+@admin.register(Invoice)
+class InvoiceAdmin(admin.ModelAdmin):
+    list_display = ('invoice_number', 'customer', 'branch', 'total_amount', 'status', 'created_at')
+    list_filter = ('status', 'branch')
+    search_fields = ('invoice_number', 'customer__email', 'customer__name')
+
+
+@admin.register(Announcement)
+class AnnouncementAdmin(admin.ModelAdmin):
+    list_display = ('title', 'audience', 'branch', 'is_active', 'created_by', 'created_at')
+    list_filter = ('audience', 'is_active', 'branch')
+    search_fields = ('title', 'message')
+
+
+@admin.register(TrainerEarning)
+class TrainerEarningAdmin(admin.ModelAdmin):
+    list_display = ('trainer', 'session', 'session_amount', 'trainer_earning', 'gym_earning', 'is_paid', 'paid_at')
+    list_filter = ('is_paid',)
+    search_fields = ('trainer__email', 'trainer__name')
